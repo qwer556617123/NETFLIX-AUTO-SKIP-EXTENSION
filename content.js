@@ -5,19 +5,28 @@
  */
 
 // ── 預設設定 ────────────────────────────────────────────────
+const POLL_INTERVAL = 300; // ms
+
 let settings = {
   skipIntro: true,
   autoNextEpisode: true,
+  skipDelay: 1500, // ms，對應 skip cooldown ticks
 };
 
 // cooldown 計數器：防止同一按鈕在冷卻期間重複觸發
-let skipCooldown = 0;       // Skip 類按鈕冷卻（5 ticks ≈ 1.5s）
+let skipCooldown = 0;       // Skip 類按鈕冷卻（動態，依 skipDelay 計算）
 let nextEpCooldown = 0;     // Next Episode 冷卻（10 ticks ≈ 3s）
 
+/** 將毫秒延遲換算為 poll ticks（最少 1 tick 避免立即重觸發） */
+function delayToTicks(ms) {
+  return Math.max(1, Math.round(ms / POLL_INTERVAL));
+}
+
 // ── 讀取初始設定 ─────────────────────────────────────────────
-chrome.storage.sync.get(['skipIntro', 'autoNextEpisode'], (result) => {
+chrome.storage.sync.get(['skipIntro', 'autoNextEpisode', 'skipDelay'], (result) => {
   if (result.skipIntro !== undefined) settings.skipIntro = result.skipIntro;
   if (result.autoNextEpisode !== undefined) settings.autoNextEpisode = result.autoNextEpisode;
+  if (result.skipDelay !== undefined) settings.skipDelay = result.skipDelay;
 });
 
 // ── 監聽 storage 變更，toggle 即時生效 ───────────────────────
@@ -27,6 +36,9 @@ chrome.storage.onChanged.addListener((changes) => {
   }
   if (changes.autoNextEpisode !== undefined) {
     settings.autoNextEpisode = changes.autoNextEpisode.newValue;
+  }
+  if (changes.skipDelay !== undefined) {
+    settings.skipDelay = changes.skipDelay.newValue;
   }
 });
 
@@ -65,7 +77,7 @@ function poll() {
     const skipBtn = document.querySelector('.watch-video--skip-content-button');
     if (skipBtn) {
       skipBtn.click();
-      skipCooldown = 5; // 冷卻 5 ticks ≈ 1.5s
+      skipCooldown = delayToTicks(settings.skipDelay);
     }
   }
 
