@@ -1,0 +1,5 @@
+# Extension private key — NEVER commit this
+*.pem
+
+# Packaged extension (distribute separately, not via git)
+*.crx
