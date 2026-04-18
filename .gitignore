@@ -6,3 +6,6 @@
 
 # Build artifact
 *.zip
+
+# Internal development plan
+PLAN.md

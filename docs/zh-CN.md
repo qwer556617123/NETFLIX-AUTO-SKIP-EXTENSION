@@ -11,7 +11,7 @@
 | 自动跳过片头 | 检测到 Skip Intro 按钮后按设定延迟自动点击 |
 | 自动跳过前情提要 | 检测到 Skip Recap 按钮后按设定延迟自动点击 |
 | 自动跳过片尾 | 检测到 Skip Epilogue 按钮后按设定延迟自动点击 |
-| 自动播放下一集 | 检测到下一集按钮后立即触发，无需等待倒计时 |
+| 自动播放下一集 | 检测到下一集按钮后按设定延迟自动点击 |
 
 所有功能均可在扩展弹窗中单独开关，设置即时生效，无需刷新页面。
 
@@ -24,7 +24,7 @@ Netflix 在全球使用相同的 DOM 选择器，无论您在中国大陆（需 
 
 ### Chrome Web Store（推荐）
 
-在 [Chrome Web Store](https://chromewebstore.google.com/detail/netflix-auto-skip/hcjplbkgooihebpcnnhfkdecajbcmjoh) 直接安装，无需开发者模式。
+在 [Chrome Web Store](https://chromewebstore.google.com/detail/ldfngohmjbighjekjmdafeelggifklfk) 直接安装，无需开发者模式。
 
 ### 手动安装（Load unpacked）
 
@@ -59,13 +59,3 @@ Netflix 在全球使用相同的 DOM 选择器，无论您在中国大陆（需 
 - **Netflix UI 更新**是主要维护风险。若自动跳过失效，可能是 Netflix 修改了 DOM class 名称，需更新 `content.js` 中的选择器。
 - 本扩展**仅读取 DOM 元素并模拟点击**，不收集任何个人数据，不与外部服务器通信。
 
-## 打包说明
-
-通过 Chrome 打包扩展（`chrome://extensions/` → **打包扩展程序**）会生成两个文件：
-
-| 文件 | 用途 |
-|------|------|
-| `netflix-auto-skip.crx` | 可安装的扩展包 |
-| `netflix-auto-skip.pem` | **私钥** — 请妥善保管，切勿提交到 git |
-
-`.pem` 文件用于在更新时保持扩展的唯一 ID，两个文件均已通过 `.gitignore` 排除在仓库之外。

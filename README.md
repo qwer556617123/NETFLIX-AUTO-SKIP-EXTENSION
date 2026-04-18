@@ -13,7 +13,7 @@
 | Auto-skip intro | Clicks "Skip Intro" after the configured delay |
 | Auto-skip recap | Clicks "Skip Recap" after the configured delay |
 | Auto-skip epilogue | Clicks "Skip Epilogue" after the configured delay |
-| Auto-play next episode | Triggers the next-episode button immediately — no countdown needed |
+| Auto-play next episode | Clicks the next-episode button after the configured delay |
 
 All features can be toggled individually in the popup. Settings take effect instantly — no page refresh needed.
 
@@ -21,7 +21,7 @@ All features can be toggled individually in the popup. Settings take effect inst
 
 ### Chrome Web Store (Recommended)
 
-Install directly from the [Chrome Web Store](https://chromewebstore.google.com/detail/netflix-auto-skip/hcjplbkgooihebpcnnhfkdecajbcmjoh) — no developer mode required.
+Install directly from the [Chrome Web Store](https://chromewebstore.google.com/detail/ldfngohmjbighjekjmdafeelggifklfk) — no developer mode required.
 
 ### Load unpacked (Manual)
 
@@ -61,19 +61,4 @@ Open the extension popup by clicking its icon in the toolbar:
 - **Netflix UI updates** are the main maintenance risk. If auto-skip stops working, Netflix may have changed DOM class names — update the selectors in `content.js`.
 - This extension **only reads DOM elements and simulates clicks**. No personal data is collected; no external servers are contacted.
 
-## Packaging
-
-When Chrome packages the extension (`chrome://extensions/` → **Pack extension**), it generates two files:
-
-| File | Purpose |
-|------|---------|
-| `netflix-auto-skip.crx` | Installable extension package |
-| `netflix-auto-skip.pem` | **Private key** — keep this secret, never commit to git |
-
-The `.pem` file maintains the extension's unique ID across updates. Both files are excluded from this repository via `.gitignore`.
-
 ---
-
-## Development
-
-See [PLAN.md](PLAN.md)

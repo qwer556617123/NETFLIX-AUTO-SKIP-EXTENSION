@@ -213,7 +213,7 @@
     <div class="toggle-item">
       <div class="toggle-label">
         <span class="title">自動跳過片頭 / 前情提要 / 片尾</span>
-        <span class="desc">偵測到 Skip 按鈕後約 1.5 秒自動點擊</span>
+        <span class="desc">偵測到 Skip 按鈕後等待 <span id="skipDelayInline">1.5 秒</span> 自動點擊</span>
       </div>
       <label class="switch">
         <input type="checkbox" id="toggleSkipIntro" />
@@ -224,7 +224,7 @@
     <div class="toggle-item">
       <div class="toggle-label">
         <span class="title">自動播放下一集</span>
-        <span class="desc">偵測到下一集按鈕後立即觸發，不需等倒數</span>
+        <span class="desc">偵測到下一集按鈕後等待 <span id="nextEpDelayInline">1.5 秒</span> 自動點擊</span>
       </div>
       <label class="switch">
         <input type="checkbox" id="toggleAutoNextEpisode" />
@@ -238,7 +238,7 @@
     <div class="delay-header">
       <div>
         <div class="title">跳過延遲</div>
-        <div class="desc">偵測到按鈕後等待多久再點擊</div>
+        <div class="desc">套用至所有按鈕（片頭、前情提要、片尾、下一集）</div>
       </div>
       <span class="value" id="delayValue">1.5 秒</span>
     </div>

@@ -14,9 +14,10 @@ let settings = {
 };
 
 // cooldown 計數器：防止同一按鈕在冷卻期間重複觸發
-let skipCooldown = 0;       // 點擊後的固定冷卻（5 ticks ≈ 1.5s），防止重複觸發
-let nextEpCooldown = 0;     // Next Episode 冷卻（10 ticks ≈ 3s）
-let skipDetectedFor = 0;    // 目前這次 Skip 按鈕已連續被偵測到幾個 tick
+let skipCooldown = 0;         // 點擊後的固定冷卻（5 ticks ≈ 1.5s），防止重複觸發
+let nextEpCooldown = 0;       // Next Episode 點擊後冷卻（10 ticks ≈ 3s）
+let skipDetectedFor = 0;      // Skip 按鈕已連續被偵測到幾個 tick
+let nextEpDetectedFor = 0;    // Next Episode 按鈕已連續被偵測到幾個 tick
 
 /** 將毫秒延遲換算為 poll ticks（最少 1 tick 避免立即重觸發） */
 function delayToTicks(ms) {
@@ -98,13 +99,22 @@ function poll() {
       document.querySelector('[data-uia="next-episode-seamless-button"]');
 
     if (nextEpBtn) {
-      const triggered = triggerReactClick(nextEpBtn);
-      if (!triggered) {
-        // fallback：嘗試原生 click（部分版本可能有效）
-        nextEpBtn.click();
+      nextEpDetectedFor++;
+      // 累積偵測 ticks 達到使用者設定的延遲後才點擊
+      if (nextEpDetectedFor >= delayToTicks(settings.skipDelay)) {
+        const triggered = triggerReactClick(nextEpBtn);
+        if (!triggered) {
+          // fallback：嘗試原生 click（部分版本可能有效）
+          nextEpBtn.click();
+        }
+        nextEpCooldown = 10; // 點擊後冷卻 10 ticks ≈ 3s，防重複觸發
+        nextEpDetectedFor = 0;
       }
-      nextEpCooldown = 10; // 冷卻 10 ticks ≈ 3s
+    } else {
+      nextEpDetectedFor = 0; // 按鈕消失，重置計數
     }
+  } else {
+    nextEpDetectedFor = 0;   // 冷卻期間重置，避免冷卻結束後立即誤觸發
   }
 }
 

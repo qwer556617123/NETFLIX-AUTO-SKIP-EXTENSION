@@ -13,9 +13,18 @@ const toggleSkipIntro       = document.getElementById('toggleSkipIntro');
 const toggleAutoNextEpisode = document.getElementById('toggleAutoNextEpisode');
 const rangeSkipDelay        = document.getElementById('skipDelay');
 const labelDelayValue       = document.getElementById('delayValue');
+const labelDelayInline      = document.getElementById('skipDelayInline');
+const labelNextEpInline     = document.getElementById('nextEpDelayInline');
 
 function formatDelay(ms) {
   return (ms / 1000).toFixed(1) + ' 秒';
+}
+
+function updateDelayLabels(ms) {
+  const text = formatDelay(ms);
+  labelDelayValue.textContent    = text;
+  labelDelayInline.textContent   = text;
+  labelNextEpInline.textContent  = text;
 }
 
 // ── 初始化：從 storage 讀取狀態並反映到 UI ───────────────────
@@ -23,7 +32,7 @@ chrome.storage.sync.get(DEFAULT_SETTINGS, (result) => {
   toggleSkipIntro.checked       = result.skipIntro;
   toggleAutoNextEpisode.checked = result.autoNextEpisode;
   rangeSkipDelay.value          = result.skipDelay;
-  labelDelayValue.textContent   = formatDelay(result.skipDelay);
+  updateDelayLabels(result.skipDelay);
 });
 
 // ── 監聽 toggle 變更，寫入 storage ──────────────────────────
@@ -37,8 +46,7 @@ toggleAutoNextEpisode.addEventListener('change', () => {
 
 // ── 監聽滑條變更 ─────────────────────────────────────────────
 rangeSkipDelay.addEventListener('input', () => {
-  const ms = Number(rangeSkipDelay.value);
-  labelDelayValue.textContent = formatDelay(ms);
+  updateDelayLabels(Number(rangeSkipDelay.value));
 });
 
 rangeSkipDelay.addEventListener('change', () => {
