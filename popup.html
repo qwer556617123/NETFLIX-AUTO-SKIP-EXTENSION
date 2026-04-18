@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Netflix Auto Skip</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      width: 280px;
+      background: #141414;
+      color: #e5e5e5;
+      font-family: 'Netflix Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      padding: 16px;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 18px;
+      border-bottom: 1px solid #333;
+      padding-bottom: 12px;
+    }
+
+    header .logo {
+      color: #e50914;
+      font-size: 20px;
+      font-weight: 900;
+      letter-spacing: 1px;
+    }
+
+    header .subtitle {
+      font-size: 12px;
+      color: #808080;
+    }
+
+    .toggle-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .toggle-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .toggle-label {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .toggle-label .title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #e5e5e5;
+    }
+
+    .toggle-label .desc {
+      font-size: 11px;
+      color: #808080;
+      line-height: 1.4;
+    }
+
+    /* Toggle switch */
+    .switch {
+      position: relative;
+      flex-shrink: 0;
+      width: 44px;
+      height: 24px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      inset: 0;
+      background: #333;
+      border-radius: 24px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .slider::before {
+      content: '';
+      position: absolute;
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      top: 3px;
+      background: #e5e5e5;
+      border-radius: 50%;
+      transition: transform 0.2s;
+    }
+
+    .switch input:checked + .slider {
+      background: #e50914;
+    }
+
+    .switch input:checked + .slider::before {
+      transform: translateX(20px);
+    }
+
+    .switch input:focus-visible + .slider {
+      outline: 2px solid #e50914;
+      outline-offset: 2px;
+    }
+
+    footer {
+      margin-top: 18px;
+      font-size: 10px;
+      color: #555;
+      text-align: center;
+      border-top: 1px solid #222;
+      padding-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <div class="logo">N AUTO SKIP</div>
+      <div class="subtitle">自動跳過 · 自動下一集</div>
+    </div>
+  </header>
+
+  <div class="toggle-list">
+    <div class="toggle-item">
+      <div class="toggle-label">
+        <span class="title">自動跳過片頭 / 前情提要 / 片尾</span>
+        <span class="desc">偵測到 Skip 按鈕後約 1.5 秒自動點擊</span>
+      </div>
+      <label class="switch">
+        <input type="checkbox" id="toggleSkipIntro" />
+        <span class="slider"></span>
+      </label>
+    </div>
+
+    <div class="toggle-item">
+      <div class="toggle-label">
+        <span class="title">自動播放下一集</span>
+        <span class="desc">偵測到下一集按鈕後立即觸發，不需等倒數</span>
+      </div>
+      <label class="switch">
+        <input type="checkbox" id="toggleAutoNextEpisode" />
+        <span class="slider"></span>
+      </label>
+    </div>
+  </div>
+
+  <footer>設定即時生效，不需重新整理頁面</footer>
+
+  <script src="popup.js"></script>
+</body>
+</html>
