@@ -3,3 +3,6 @@
 
 # Packaged extension (distribute separately, not via git)
 *.crx
+
+# Build artifact
+*.zip
