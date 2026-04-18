@@ -14,8 +14,9 @@ let settings = {
 };
 
 // cooldown 計數器：防止同一按鈕在冷卻期間重複觸發
-let skipCooldown = 0;       // Skip 類按鈕冷卻（動態，依 skipDelay 計算）
+let skipCooldown = 0;       // 點擊後的固定冷卻（5 ticks ≈ 1.5s），防止重複觸發
 let nextEpCooldown = 0;     // Next Episode 冷卻（10 ticks ≈ 3s）
+let skipDetectedFor = 0;    // 目前這次 Skip 按鈕已連續被偵測到幾個 tick
 
 /** 將毫秒延遲換算為 poll ticks（最少 1 tick 避免立即重觸發） */
 function delayToTicks(ms) {
@@ -76,9 +77,18 @@ function poll() {
   if (settings.skipIntro && skipCooldown === 0) {
     const skipBtn = document.querySelector('.watch-video--skip-content-button');
     if (skipBtn) {
-      skipBtn.click();
-      skipCooldown = delayToTicks(settings.skipDelay);
+      skipDetectedFor++;
+      // 累積偵測 ticks 達到使用者設定的延遲後才點擊
+      if (skipDetectedFor >= delayToTicks(settings.skipDelay)) {
+        skipBtn.click();
+        skipCooldown = 5;    // 點擊後固定冷卻 5 ticks ≈ 1.5s，防重複觸發
+        skipDetectedFor = 0;
+      }
+    } else {
+      skipDetectedFor = 0;   // 按鈕消失（已被點擊或 Netflix 收回），重置計數
     }
+  } else {
+    skipDetectedFor = 0;     // 冷卻期間重置，避免冷卻結束後立即誤觸發
   }
 
   // 2. 自動播放下一集（倒數中 / 靜態）
